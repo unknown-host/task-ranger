@@ -10,11 +10,11 @@ defmodule DataHandler do
     end)
   end
   """
-
-  # @spec sanitizing_output(list(map()), list(atom())) :: map()
-  def sanitize_output(result), do: sanitize_output(result, [:coefficient])
+  @spec sanitize_output(list(map()), list(atom())) :: list(map())
   def sanitize_output(result, keys) do
     Enum.map(result, &Map.drop(&1, keys))
   end
+  # @spec sanitize_output(list(map())) :: list(map())
+  def sanitize_output(result), do: sanitize_output(result, [:coefficient])
 
 end

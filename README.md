@@ -1,14 +1,14 @@
-There is a list of tasks, each of them has a duration and a value parameters.
-We need to range the tasks to fit into a given time limit.
+There is a list of tasks, each of them has duration and value parameters.
+We need to rank the tasks to fit into a given time limit. An :id field was added for ease of input data modeling.
 
 Preparation:
-- Add a coefficient(duration / value) to each task to help with the ranking.
-- Sort the tasks by the coefficient in asc(desc)ending order, depends on the algorythm.
+- Add a coefficient to each task to help with the ranking.
+- Sort the tasks by the coefficient in ascending or descending order, depending on the algorithm.
 
-Algorythm:
-- Compute the difference between the total time and the sum of the duration fields of the list of tasks. 
-- If time_limit >= sum_tasks_duration, return sorted list of tasks.
-- Now we have a new defenition, extra_time = time_limit - sum_tasks_duration.
-- Extra time - for excessive tasks. 
-Take tasks one by one from descending sorted list of tasks, check sum of durations of low coefficient tasks. If its <= the extra time - add them to the excessive list.
-- Now we have a list of extra tasks that we need to exclude from list of all tasks. Return new list of all tasks.
+Algorithm:
+- Compute the difference between the total time limit and the sum of the durations of all tasks.
+- If time_limit >= sum_tasks_duration, return the sorted list of tasks.
+- Now we have a new definition: extra_time = sum_tasks_duration - time_limit.
+- Extra time is for excessive tasks.
+- Take tasks one by one from the descending sorted list of tasks, check the sum of durations of low coefficient tasks. If it's <= the extra time, add them to the excessive list.
+- Now we have a list of extra tasks that we need to exclude from the list of all tasks. Return the updated list of all tasks.

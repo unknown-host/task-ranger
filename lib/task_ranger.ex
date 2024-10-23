@@ -1,35 +1,35 @@
 defmodule TaskRanger do
-  #@spec ranging(list(map()), atom()) :: list(map())
-   def ranging(data, limit, sorting_order) do
+
+  @spec sort(list(map()), number(), atom()) :: list(map())
+  defp sort(data, limit, sorting_order) do
     data
     |> Enum.map(&Map.put(&1, :coefficient, (&1.duration / limit) * &1.value))
     |> Enum.sort_by(&Map.get(&1, :coefficient), sorting_order)
   end
 
-  # @spec ranging_with_limit(list(map()), integer()) :: list(map())
-  # def ranging_with_limit(data, total_time) do
-  #   data
-  #   |> ranging(:asc)
-  #   |> Enum.reduce_while([], fn task, acc ->
-  #     acc_duration = fn -> Enum.sum(Enum.map(acc, & &1.duration)) end
-  #     if acc_duration.() + task.duration <= total_time do
-  #   |> Enum.reduce_while([], fn(task, acc) ->
-  #     acc_duration = fn -> Enum.sum(Enum.map(acc, & &1.duration)) end
-  #     if acc_duration.() + task.duration <= lack_time do
-  #       {:cont, [task | acc]}
-  #     else
-  #       {:halt, acc}
-  #   end
-  #   |> (& sorting_data -- &1).()
-  # end
-
-
-  # @spec ranging(tuple())::list(Task.t())
-  def ranging_with_lack_of_time({list, numb}) do
-    {task_list, time_limit} = {list, numb}
-    tasks_duration_sum = task_list |> Enum.map(& &1.duration) |> Enum.sum
-    lack_of_time = time_limit - tasks_duration_sum
-
-
+  defp sum_of_duration(task_list) do
+    Enum.sum(Enum.map(task_list, & &1.duration))
   end
+
+  @spec rank(tuple())::list(map())
+  def rank(data) do
+    {task_list, time_limit} = data
+    sorted_less_coeff = sort(task_list, time_limit, :asc)
+    lack_of_time = sum_of_duration(task_list) - time_limit
+
+    excessive_part = Enum.reduce_while(sorted_less_coeff, [],
+      fn(task, list_extra_task) ->
+        if (sum_of_duration(list_extra_task) + task.duration) <= lack_of_time do
+          {:cont, [task | list_extra_task]}
+        else
+          {:halt, list_extra_task}
+        end
+      end
+    )
+
+    sorted_less_coeff -- excessive_part
+    |> Enum.reverse()
+    |> DataHandler.sanitize_output()
+  end
+
 end
