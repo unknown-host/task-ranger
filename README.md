@@ -12,3 +12,5 @@ Algorithm:
 - Extra time is for excessive tasks.
 - Take tasks one by one from the descending sorted list of tasks, check the sum of durations of low coefficient tasks. If it's <= the extra time, add them to the excessive list.
 - Now we have a list of extra tasks that we need to exclude from the list of all tasks. Return the updated list of all tasks.
+
+"$ mix test"
